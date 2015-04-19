@@ -13,6 +13,8 @@
     <body>
         <%
             Connection connection = null;
+            Statement statement = null;
+            ResultSet rs = null;
 
             String username = request.getParameter( "username" );
             String password = request.getParameter( "password" );
@@ -36,9 +38,18 @@
 
             if ( connection != null )
             {
-                session.setAttribute( "username", username );
-                session.setAttribute( "password", password );
-                response.sendRedirect( "Home.jsp" );
+                statement = connection.createStatement();
+
+                rs = statement.executeQuery( "SELECT * FROM login WHERE email = '" + username + "' AND password = '" + password + "'" );
+                if ( rs.next() )
+                {
+                    session.setAttribute( "username", rs.getString( "email" ) );
+                    session.setAttribute( "name", rs.getString( "name" ) );
+                    session.setAttribute( "level", rs.getString( "level" ) );                    
+                    response.sendRedirect( "Home.jsp" );
+                }
+                else
+                response.sendRedirect( "Error.jsp" );
             }
             else
                 response.sendRedirect( "Error.jsp" );

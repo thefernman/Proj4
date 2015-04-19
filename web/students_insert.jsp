@@ -17,7 +17,6 @@
 
             String username = session.getAttribute( "username" ).toString();
             String password = session.getAttribute( "password" ).toString();
-            String db_name = session.getAttribute( "db_name" ).toString();
             try
             {
                 Class.forName( "org.postgresql.Driver" );

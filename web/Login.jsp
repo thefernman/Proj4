@@ -12,7 +12,7 @@
         <title>Login Page</title>
     </head>
     <body>
-        <h1>COP-4710 Database Login</h1>
+        <h1>COP-4710 Web Application Login</h1>
         <form action="LoginCheck.jsp" method="post">
             <br/>Username:<br><input type="text" name="username">
             <br/>Password:<br><input type="password" name="password">

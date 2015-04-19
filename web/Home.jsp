@@ -14,11 +14,12 @@
     <body>
         <%
             String username = session.getAttribute( "username" ).toString();
-            String db_name = session.getAttribute( "db_name" ).toString();
-            
-            
+            String name = session.getAttribute( "name" ).toString();
+            String level = session.getAttribute( "level" ).toString();
+
             Connection connection = null;
             Statement statement = null;
+            ResultSet rs = null;
 
             try
             {
@@ -37,17 +38,36 @@
                 out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
             }
         %>
-        <h1>Welcome to <%= username%> Database</h2>
-        <h2>Main Page</h2>
-
-        <a href="students.jsp">students</a><br>
-        <a href="enroll.jsp">enroll</a><br>
-        <a href="courses.jsp">courses</a><br>
-        <a href="faculties.jsp">faculties</a><br>
-        <a href="title.jsp">title</a>
-        <br/>
-        <br/>
-        <br/><br/><br/><br/><br/>
-        <a href="Logout.jsp">Logout</a>
-</body>
-</html>
+        <h1>Welcome to <%= name%></h2>
+        <h2>Main Page - <%=level%></h2>
+        <%
+            if ( connection != null )
+            {
+                statement = connection.createStatement();
+                if(!(level.equals( "student")))
+                {
+                    rs = statement.executeQuery( "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
+                        + "and table_name != 'school_probs' and table_name != 'grade_values' and table_name != 'simulated_records'" );
+                    out.println( "<table border=1>" );
+                    while ( rs.next() )
+                    {
+                     String table_name = rs.getString( "table_name" );
+                     %><tr><td><a href="<%=table_name%>.jsp"><%=table_name%></td></tr><%
+                    }
+                    out.println( "</table>" );
+                }
+                else
+                {
+                        %><table border=1>
+                            <tr><td><a href="students.jsp">students</a></td></tr>
+                            <tr><td><a href="enroll.jsp">enroll</a></td></tr>
+                            <tr><td><a href="courses.jsp">courses</a></td></tr>
+                            <tr><td><a href="faculties.jsp">faculties</a></td></tr>
+                        </table><%
+                }
+            }
+        %>
+            <br/><br/>
+            <a href="Logout.jsp">Logout</a>
+            </body>
+            </html>
