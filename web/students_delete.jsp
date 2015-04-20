@@ -14,10 +14,18 @@
         <%
             Connection connection = null;
             Statement statement = null;
+            String level_ = null;
+            String name = null;
 
-            String username = session.getAttribute( "username" ).toString();
-            String password = session.getAttribute( "password" ).toString();
-            String db_name = session.getAttribute( "db_name" ).toString();
+            try
+            {
+                level_ = session.getAttribute( "level" ).toString();
+                name = request.getParameter( "student_name" );
+            }
+            catch ( NullPointerException e )
+            {
+                out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
+            }
             try
             {
                 Class.forName( "org.postgresql.Driver" );
@@ -29,19 +37,27 @@
             try
             {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_" + db_name,
-                        "spr15_" + username, password );
+                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/"
+                                + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
                 statement = connection.createStatement();
             }
             catch ( Exception e )
             {
                 out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
             }
-
-            String name = request.getParameter( "student_name" );
-            statement.executeUpdate( "DELETE FROM students WHERE student_id = (SELECT student_id FROM students WHERE name = '" + name + "')" );
+            
             if ( connection != null )
-                response.sendRedirect( "students.jsp" );
+                if ( !( level_.equals( "student" ) ) )
+                {
+                    statement.executeUpdate( "DELETE FROM students WHERE student_id = "
+                    + "(SELECT student_id FROM students WHERE name = '" + name + "')" );
+                    response.sendRedirect( "students.jsp" );
+                }
+                else
+                {
+                    out.println( "No Access" );
+                    response.sendRedirect( "No_Access.jsp" );
+                }
             else
             {
                 out.println( "Error" );

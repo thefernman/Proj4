@@ -29,7 +29,8 @@
             }
             try
             {
-                connection = DriverManager.getConnection( "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
+                connection = DriverManager.getConnection( "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/"
+                        + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
             }
             catch ( Exception e )
             {

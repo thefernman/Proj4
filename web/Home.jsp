@@ -31,7 +31,9 @@
             }
             try
             {
-                connection = DriverManager.getConnection( "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
+                connection = DriverManager.getConnection( "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/"
+                        + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
+                statement = connection.createStatement();
             }
             catch ( Exception e )
             {
@@ -43,11 +45,12 @@
         <%
             if ( connection != null )
             {
-                statement = connection.createStatement();
-                if(!(level.equals( "student")))
+                if(!(level.equals( "student" )))
                 {
-                    rs = statement.executeQuery( "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
-                        + "and table_name != 'school_probs' and table_name != 'grade_values' and table_name != 'simulated_records'" );
+                    rs = statement.executeQuery( "SELECT table_name FROM information_schema.tables "
+                            + "WHERE table_schema = 'public' and table_name != 'school_probs' and "
+                            + "table_name != 'grade_values' and table_name != 'simulated_records' and "
+                            + "table_name != 'login'" );
                     out.println( "<table border=1>" );
                     while ( rs.next() )
                     {
@@ -62,7 +65,6 @@
                             <tr><td><a href="students.jsp">students</a></td></tr>
                             <tr><td><a href="enroll.jsp">enroll</a></td></tr>
                             <tr><td><a href="courses.jsp">courses</a></td></tr>
-                            <tr><td><a href="faculties.jsp">faculties</a></td></tr>
                         </table><%
                 }
             }

@@ -15,9 +15,8 @@
             Connection connection = null;
             Statement statement = null;
 
-            String username = session.getAttribute( "username" ).toString();
-            String password = session.getAttribute( "password" ).toString();
-            String db_name = session.getAttribute( "db_name" ).toString();
+            String level_ = session.getAttribute( "level" ).toString();
+
             try
             {
                 Class.forName( "org.postgresql.Driver" );
@@ -29,8 +28,8 @@
             try
             {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_" + db_name,
-                        "spr15_" + username, password );
+                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/"
+                                + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
                 statement = connection.createStatement();
             }
             catch ( Exception e )
@@ -38,18 +37,28 @@
                 out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
             }
 
-            int faculty_id = Integer.parseInt(request.getParameter( "faculty_id" ));
-            String name = request.getParameter( "name" );
-            String date_of_birth = request.getParameter( "date_of_birth" );
-            String address = request.getParameter( "address" );
-            String email = request.getParameter( "email" );
-            String level = request.getParameter( "level" );
-            statement.executeUpdate( "INSERT INTO faculties "
-                    + "VALUES (" + faculty_id + ", '" + name + "', (to_date('" 
-                    + date_of_birth + "', 'MM/DD/YYYY')), '" + address + "', '" 
-                    + email + "', '" + level + "')" );
-            if ( connection != null)
-                response.sendRedirect( "faculties.jsp" );
+            if ( connection != null )
+                if ( !( level_.equals( "student" ) ) )
+                {
+                    int faculty_id = Integer.parseInt( request.getParameter( "faculty_id" ) );
+                    String name = request.getParameter( "name" );
+                    String date_of_birth = request.getParameter( "date_of_birth" );
+                    String address = request.getParameter( "address" );
+                    String email = request.getParameter( "email" );
+                    String level = request.getParameter( "level" );
+
+                    statement.executeUpdate( "INSERT INTO faculties "
+                            + "VALUES (" + faculty_id + ", '" + name + "', (to_date('"
+                            + date_of_birth + "', 'YYYY-MM-DD')), '" + address + "', '"
+                            + email + "', '" + level + "')" );
+
+                    response.sendRedirect( "faculties.jsp" );
+                }
+                else
+                {
+                    out.println( "No Access" );
+                    response.sendRedirect( "No_Access.jsp" );
+                }
             else
             {
                 out.println( "Error" );

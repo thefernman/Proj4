@@ -14,10 +14,10 @@
         <%
             Connection connection = null;
             Statement statement = null;
+            ResultSet rs = null;
 
-            String username = session.getAttribute( "username" ).toString();
-            String password = session.getAttribute( "password" ).toString();
-            String db_name = session.getAttribute( "db_name" ).toString();
+            String level_ = session.getAttribute( "level" ).toString();
+
             try
             {
                 Class.forName( "org.postgresql.Driver" );
@@ -29,8 +29,8 @@
             try
             {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_" + db_name,
-                        "spr15_" + username, password );
+                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/"
+                        + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
                 statement = connection.createStatement();
             }
             catch ( Exception e )
@@ -38,14 +38,33 @@
                 out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
             }
 
-            int course_id = Integer.parseInt( request.getParameter( "course_id" ) );
-            String description = request.getParameter( "description" );
-            String level = request.getParameter( "level" );
-            String faculty_name = request.getParameter( "faculty_name" );
-            statement.executeUpdate( "INSERT INTO faculties "
-                    + "VALUES (" + course_id + ", '" + description + level + "')" );
             if ( connection != null )
-                response.sendRedirect( "courses.jsp" );
+            {
+                if ( !( level_.equals( "student" ) ) )
+                {
+                    int course_id = Integer.parseInt( request.getParameter( "course_id" ) );
+                    String description = request.getParameter( "description" );
+                    String level = request.getParameter( "level" );
+                    String semester = request.getParameter( "semester" );
+                    
+                    String faculty_name = request.getParameter( "faculty_name" );
+                    rs = statement.executeQuery( "SELECT faculty_id FROM faculties WHERE name = '" 
+                            + faculty_name + "'" );
+                    rs.next();
+                    int faculty_id = rs.getInt( "faculty_id" );
+                    
+                    statement.executeUpdate( "INSERT INTO courses "
+                            + "VALUES (" + course_id + ", '" + description + "', '" 
+                            + level + "', " + faculty_id + ", '"+ semester +"')" );
+
+                    response.sendRedirect( "courses.jsp" );
+                }
+                else
+                {
+                    out.println( "No Access" );
+                    response.sendRedirect( "No_Access.jsp" );
+                }
+            }
             else
             {
                 out.println( "Error" );

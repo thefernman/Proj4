@@ -1,6 +1,6 @@
 <%-- 
-    Document   : students_insert
-    Created on : Apr 17, 2015, 4:34:06 PM
+    Document   : enroll_insert
+    Created on : Apr 19, 2015, 7:23:27 PM
     Author     : Fernando
 --%>
 
@@ -14,6 +14,7 @@
         <%
             Connection connection = null;
             Statement statement = null;
+            ResultSet rs = null;
 
             String level_ = session.getAttribute( "level" ).toString();
 
@@ -29,7 +30,7 @@
             {
                 connection = DriverManager.getConnection(
                         "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/"
-                                + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
+                        + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
                 statement = connection.createStatement();
             }
             catch ( Exception e )
@@ -40,19 +41,24 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    int student_id = Integer.parseInt( request.getParameter( "student_id" ) );
-                    String name = request.getParameter( "name" );
-                    String date_of_birth = request.getParameter( "date_of_birth" );
-                    String address = request.getParameter( "address" );
-                    String email = request.getParameter( "email" );
-                    String level = request.getParameter( "level" );
+                    String student_name = request.getParameter( "student_name" );
+                    rs = statement.executeQuery( "SELECT * FROM students WHERE name = '"
+                            + student_name + "'" );
+                    rs.next();
+                    int student_id = rs.getInt( "student_id" );
 
-                    statement.executeUpdate( "INSERT INTO students "
-                            + "VALUES (" + student_id + ", '" + name + "', (to_date('"
-                            + date_of_birth + "', 'YYYY-MM-DD')), '" + address + "', '"
-                            + email + "', '" + level + "')" );
+                    String course_description = request.getParameter( "course_description" );
+                    rs = statement.executeQuery( "SELECT * FROM courses WHERE description = '"
+                            + course_description + "'" );
+                    rs.next();
+                    int course_id = rs.getInt( "course_id" );
+                    String grade = request.getParameter( "grade" );
+                    
+                    statement.executeUpdate( "INSERT INTO enroll "
+                            + "VALUES (" + student_id + ", " + course_id + ", '"
+                            + grade + "')" );
 
-                    response.sendRedirect( "students.jsp" );
+                    response.sendRedirect( "enroll.jsp" );
                 }
                 else
                 {
@@ -64,8 +70,6 @@
                 out.println( "Error" );
                 response.sendRedirect( "Error.jsp" );
             }
-
-
         %>
     </body>
 </html>

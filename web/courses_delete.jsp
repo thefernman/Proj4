@@ -14,10 +14,19 @@
         <%
             Connection connection = null;
             Statement statement = null;
+            String level_ = null;
+            String description = null;
 
-            String username = session.getAttribute( "username" ).toString();
-            String password = session.getAttribute( "password" ).toString();
-            String db_name = session.getAttribute( "db_name" ).toString();
+            try
+            {
+                level_ = session.getAttribute( "level" ).toString();
+                description = request.getParameter( "description" );
+            }
+            catch ( NullPointerException e )
+            {
+                out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
+            }
+
             try
             {
                 Class.forName( "org.postgresql.Driver" );
@@ -29,31 +38,31 @@
             try
             {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_" + db_name,
-                        "spr15_" + username, password );
+                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/"
+                        + "spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
                 statement = connection.createStatement();
             }
             catch ( Exception e )
             {
                 out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
             }
-            try
-            {
-                String description = request.getParameter( "description" );
-                //statement.executeUpdate( "DELETE FROM courses WHERE course_id = (SELECT course_id FROM courses WHERE description = '" + description + "')" );
-                if ( connection != null )
-                    response.sendRedirect( "courses.jsp" );
-            }
-            catch ( Exception e )
-            {
-                out.println( "<h3>exception: " + e + e.getMessage() + "</h3>" );
-            }
-//            else
-//            {
-//                out.println( "Error" );
-//                response.sendRedirect( "Error.jsp" );
-//            }
 
+            if ( connection != null )
+                if ( !( level_.equals( "student" ) ) )
+                {
+                    statement.executeUpdate( "DELETE FROM courses WHERE description = '" + description + "'" );
+                    response.sendRedirect( "courses.jsp" );
+                }
+                else
+                {
+                    out.println( "No Access" );
+                    response.sendRedirect( "No_Access.jsp" );
+                }
+            else
+            {
+                out.println( "Error" );
+                response.sendRedirect( "Error.jsp" );
+            }
 
         %>
     </body>

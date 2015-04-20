@@ -14,9 +14,8 @@
     <body>
         <h2>Faculties Table</h2>
         <%
-            String username = session.getAttribute( "username" ).toString();
-            String password = session.getAttribute( "password" ).toString();
-            String db_name = session.getAttribute( "db_name" ).toString();
+            String name_ = session.getAttribute( "name" ).toString();
+            String level_ = session.getAttribute( "level" ).toString();
             Connection connection = null;
             Statement statement = null;
             ResultSet rs = null;
@@ -32,11 +31,17 @@
             try
             {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_" + db_name,
-                        "spr15_" + username, password );
+                        "jdbc:postgresql://cop4710-postgresql.cs.fiu.edu:5432/spr15_fcamp001?user=spr15_fcamp001&password=1299228" );
+            }
+            catch ( Exception e )
+            {
+                out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
+            }
 
-                statement = connection.createStatement();
+            statement = connection.createStatement();
 
+            if ( !( level_.equals( "student" ) ) )
+            {
                 rs = statement.executeQuery( "SELECT * FROM faculties" );
                 out.println( "<table border=1>" );
                 out.println( "<tr><td> faculty_id </td><td> name </td><td> date_of_birth </td><td> address </td><td> email </td><td> level </td></tr>" );
@@ -50,46 +55,41 @@
                     String level = rs.getString( "level" );
                     out.println( "<tr><td>" + faculty_id + "</td><td>" + name + "</td><td>" + date_of_birth + "</td><td>" + address + "</td><td>" + email + "</td><td>" + level + "</td></tr>" );
                 }
-                out.println( "</table>" );
 
-            }
-            catch ( Exception e )
-            {
-                out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
-            }
         %>
-        
-        <h3>Insert New Faculty</h3>
         <form action="faculties_insert.jsp" method="post">
-            Faculty ID:<br><input type="number" name="faculty_id" required>
-            <br/>Name:<br><input type="text" name="name" required>
-            <br/>Date of Birth:<br><input type="text" name="date_of_birth" required>
-            <br/>Address:<br><input type="text" name="address" required>
-            <br/>Email:<br><input type="text" name="email" required>
-            <br/>Level:<br>
-            <select name="level" id>
-                <option selected>Instr</option>
-                <option>Prof</option>
-                <option>AP</option>
-            </select>
-            <br><br><input type="submit" value="Insert">
+            <tr><td><input type="number" name="faculty_id" required></td>
+                <td><input type="text" name="name" required></td>
+                <td><input type="date" name="date_of_birth" required></td>
+                <td><input type="text" name="address" required></td>
+                <td><input type="email" name="email" required></td>
+                <td><select name="level" id>
+                        <option selected>Instr</option>
+                        <option>Prof</option>
+                        <option>AP</option>
+                    </select></td>
+                    </table>
+            <br><input type="submit" value="Insert">
         </form>
         <%
-        rs = statement.executeQuery( "SELECT * FROM faculties" );
+            rs = statement.executeQuery( "SELECT * FROM faculties" );
         %>
-        
-    <h3>Delete Student</h3>
-    <form action="faculties_delete.jsp" method="post">
-        <select name="faculty_name">
-        <%  while(rs.next()){ %>
-            <option><%= rs.getString( "name" )%></option>
-        <% } %>
-        </select>
-        <br><br><input type="submit" value="Delete">
-    </form>    
-    <%
-        connection.close();
-    %>
+
+        <h3>Delete Faculty</h3>
+        <form action="faculties_delete.jsp" method="post">
+            <select name="faculty_name">
+                <%  while ( rs.next() )
+                    {%>
+                <option><%= rs.getString( "name" )%></option>
+                <% } %>
+            </select>
+            <br><br><input type="submit" value="Delete">
+        </form>    
+        <%
+            }
+
+            connection.close();
+        %>
         <br><br><a href="Home.jsp">Home</a>
     </body>
 </html>

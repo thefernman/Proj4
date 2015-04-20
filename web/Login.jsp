@@ -14,8 +14,8 @@
     <body>
         <h1>COP-4710 Web Application Login</h1>
         <form action="LoginCheck.jsp" method="post">
-            <br/>Username:<br><input type="text" name="username">
-            <br/>Password:<br><input type="password" name="password">
+            Username:<br><input type="text" name="username" required>
+            <br/>Password:<br><input type="password" name="password" required>
             <br/><br><input type="submit" value="Submit">
         </form>	
     </body>
