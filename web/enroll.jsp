@@ -102,44 +102,25 @@
             <br><input type="submit" value="Insert">
         </form>
         <%
-        }
-        else
-        {
+                }
+                else
+                {
 
-            rs = statement.executeQuery( "SELECT enroll.student_id, "
-                    + "enroll.course_id, enroll.grade, students.name, "
-                    + "courses.description FROM enroll, students, courses "
-                    + "WHERE enroll.student_id = students.student_id and "
-                    + "enroll.course_id = courses.course_id and students.name = '" + name_ + "'" );
-            out.println( "<table border=1>" );
-            out.println( "<tr><td> Student Name </td><td> Course Desription </td><td> grade </td></tr>" );
-            while ( rs.next() )
-            {
-                String student_name = rs.getString( "name" );
-                String course_description = rs.getString( "description" );
-                String grade = rs.getString( "grade" );
-                out.println( "<tr><td>" + student_name + "</td><td>" + course_description + "</td><td>" + grade + "</td></tr>" );
-            }
-
-        %>
-        <form action="students_insert.jsp" method="post">
-            <tr><td><%= name_%></td>
-                <td><select name="course_description" required>
-                        <option selected disabled hidden value=''></option>
-                        <%
-                            rs = statement.executeQuery( "SELECT description FROM courses" );
-                            while ( rs.next() )
-                            {%>
-                        <option><%= rs.getString( "description" )%></option>
-                        <% } %>
-                    </select></td>
-                <td>
-                    <%
-                        out.println( "</table>" );
-                    %>
-                    <br><input type="submit" value="Insert">
-        </form>
-        <%
+                    rs = statement.executeQuery( "SELECT enroll.student_id, "
+                            + "enroll.course_id, enroll.grade, students.name, "
+                            + "courses.description FROM enroll, students, courses "
+                            + "WHERE enroll.student_id = students.student_id and "
+                            + "enroll.course_id = courses.course_id and students.name = '" + name_ + "'" );
+                    out.println( "<table border=1>" );
+                    out.println( "<tr><td> Student Name </td><td> Course Desription </td><td> grade </td></tr>" );
+                    while ( rs.next() )
+                    {
+                        String student_name = rs.getString( "name" );
+                        String course_description = rs.getString( "description" );
+                        String grade = rs.getString( "grade" );
+                        out.println( "<tr><td>" + student_name + "</td><td>" + course_description + "</td><td>" + grade + "</td></tr>" );
+                    }
+                    out.println( "</table>" );
                 }
 
             connection.close();

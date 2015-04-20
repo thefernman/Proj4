@@ -45,7 +45,7 @@
         <%
             if ( connection != null )
             {
-                if(!(level.equals( "student" )))
+                if ( !( level.equals( "student" ) ) )
                 {
                     rs = statement.executeQuery( "SELECT table_name FROM information_schema.tables "
                             + "WHERE table_schema = 'public' and table_name != 'school_probs' and "
@@ -54,22 +54,34 @@
                     out.println( "<table border=1>" );
                     while ( rs.next() )
                     {
-                     String table_name = rs.getString( "table_name" );
-                     %><tr><td><a href="<%=table_name%>.jsp"><%=table_name%></td></tr><%
-                    }
-                    out.println( "</table>" );
-                }
-                else
-                {
-                        %><table border=1>
-                            <tr><td><a href="students.jsp">students</a></td></tr>
-                            <tr><td><a href="enroll.jsp">enroll</a></td></tr>
-                            <tr><td><a href="courses.jsp">courses</a></td></tr>
-                        </table><%
-                }
+                        String table_name = rs.getString( "table_name" );
+        %><tr><td><a href="<%=table_name%>.jsp"><%=table_name%></td></tr><%
+            }
+            out.println( "</table>" );
+        }
+        else
+        {
+            %><table border=1>
+            <tr><td><a href="students.jsp">students</a></td></tr>
+            <tr><td><a href="enroll.jsp">enroll</a></td></tr>
+            <tr><td><a href="courses.jsp">courses</a></td></tr>
+        </table><%
             }
         %>
-            <br/><br/>
-            <a href="Logout.jsp">Logout</a>
-            </body>
-            </html>
+        <h3>Search</h3>
+        <form action="search.jsp" method="post">
+            <select name="search_type">
+                <option>Student</option>
+                <option>Faculty</option>
+                <option>Course</option>
+                </select>
+            <br><br><input type="text" name="toSearchFor" required>
+            <br><br><input type="submit" value="Search">
+        </form>
+                <%
+            }
+                %>
+                <br/><br/>
+                <a href="Logout.jsp">Logout</a>
+                </body>
+                </html>
