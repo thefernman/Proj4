@@ -57,7 +57,7 @@
                 {
                     if ( search_type.equals( "Student" ) )//Search for students
                     {
-                        rs = statement.executeQuery( "SELECT * FROM students WHERE name = '" + toSearchFor + "'" );
+                        rs = statement.executeQuery( "SELECT * FROM students WHERE name ILIKE '%" + toSearchFor + "%'" );
                         if ( rs.isBeforeFirst() )
                         {
                             out.println( "<h3>Students</h3>" );
@@ -71,7 +71,7 @@
                                 out.println( "<td>" + rs.getString( "column_name" ) + "</td>" );
                             }
                             out.println( "</tr>" );
-                            rs = statement.executeQuery( "SELECT * FROM students WHERE name = '" + toSearchFor + "'" );
+                            rs = statement.executeQuery( "SELECT * FROM students WHERE name ILIKE '%" + toSearchFor + "%'" );
 
                             while ( rs.next() )
                             {
@@ -85,7 +85,7 @@
                                     + "enroll.grade FROM enroll, students, courses "
                                     + "WHERE students.student_id = enroll.student_id "
                                     + "AND enroll.course_id = courses.course_id "
-                                    + "AND students.name = '" + toSearchFor + "'" );
+                                    + "AND students.name ILIKE '%" + toSearchFor + "%'" );
 
                             if ( rs.isBeforeFirst() )
                             {
@@ -124,7 +124,7 @@
         }//search type students
         else if ( search_type.equals( "Faculty" ) )
         {
-            rs = statement.executeQuery( "SELECT * FROM faculties WHERE name = '" + toSearchFor + "'" );
+            rs = statement.executeQuery( "SELECT * FROM faculties WHERE name ILIKE '%" + toSearchFor + "%'" );
             if ( rs.isBeforeFirst() )
             {
                 out.println( "<h3>Faculty</h3>" );
@@ -138,7 +138,7 @@
                     out.println( "<td>" + rs.getString( "column_name" ) + "</td>" );
                 }
                 out.println( "</tr>" );
-                rs = statement.executeQuery( "SELECT * FROM faculties WHERE name = '" + toSearchFor + "'" );
+                rs = statement.executeQuery( "SELECT * FROM faculties WHERE name ILIKE '%" + toSearchFor + "%'" );
 
                 while ( rs.next() )
                 {
@@ -152,7 +152,7 @@
                         + "courses.description, courses.level, faculties.name, "
                         + "courses.semester FROM courses, faculties "
                         + "WHERE instructor = faculties.faculty_id "
-                        + "AND faculties.name = '" + toSearchFor + "'"
+                        + "AND faculties.name ILIKE '%" + toSearchFor + "%'"
                         + "ORDER BY courses.course_id " );
 
                 if ( rs.isBeforeFirst() )
@@ -186,7 +186,7 @@
         else // Courses search
         {
             rs = statement.executeQuery( "SELECT * FROM courses, faculties WHERE courses.instructor = faculties.faculty_id AND "
-                    + "description = '" + toSearchFor + "'" );
+                    + "description ILIKE '%" + toSearchFor + "%'" );
             if ( rs.isBeforeFirst() )
             {
                 out.println( "<h3>Courses</h3>" );
@@ -201,7 +201,7 @@
                 }
                 out.println( "</tr>" );
                 rs = statement.executeQuery( "SELECT * FROM courses, faculties WHERE courses.instructor = faculties.faculty_id AND "
-                        + "description = '" + toSearchFor + "'" );
+                        + "description ILIKE '%" + toSearchFor + "%'" );
 
                 while ( rs.next() )
                 {

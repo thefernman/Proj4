@@ -63,7 +63,7 @@
                 <td><input type="date" name="date_of_birth" required></td>
                 <td><input type="text" name="address" required></td>
                 <td><input type="email" name="email" required></td>
-                <td><select name="level" id>
+                <td><select name="level">
                         <option selected>Instr</option>
                         <option>Prof</option>
                         <option>AP</option>

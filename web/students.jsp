@@ -44,7 +44,7 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    rs = statement.executeQuery( "SELECT * FROM students" );
+                    rs = statement.executeQuery( "SELECT * FROM students ORDER BY student_id" );
                     out.println( "<table border=1>" );
                     out.println( "<tr><td> student_id </td><td> name </td><td> date_of_birth </td><td> address </td><td> email </td><td> level </td></tr>" );
                     while ( rs.next() )
@@ -78,7 +78,21 @@
         </form>
         <%            rs = statement.executeQuery( "SELECT * FROM students" );
         %>
-
+        
+        <h4>Update Student</h4>
+        <form action="students_update.jsp" method="post">
+            <select name="student_name">
+                <%  while ( rs.next() )
+                    {%>
+                <option><%= rs.getString( "name" )%></option>
+                <% } %>
+            </select>
+            <br><br><input type="submit" value="Update">
+        </form>
+            
+        <%            rs = statement.executeQuery( "SELECT * FROM students" );
+        %>
+            
         <h4>Delete Student</h4>
         <form action="students_delete.jsp" method="post">
             <select name="student_name">

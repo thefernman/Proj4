@@ -49,7 +49,7 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    statement.executeUpdate( "DELETE FROM faculties WHERE name = '" + name + "')" );
+                    statement.executeUpdate( "DELETE FROM faculties WHERE name = '" + name + "'" );
                     response.sendRedirect( "faculties.jsp" );
                 }
                 else

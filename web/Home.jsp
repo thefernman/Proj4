@@ -75,7 +75,7 @@
                 <option>Faculty</option>
                 <option>Course</option>
                 </select>
-            <br><br><input type="text" name="toSearchFor" required>
+            <br><br><input type="text" name="toSearchFor">
             <br><br><input type="submit" value="Search">
         </form>
                 <%
