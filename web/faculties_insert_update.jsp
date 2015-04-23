@@ -1,6 +1,6 @@
 <%-- 
-    Document   : students_insert_update
-    Created on : Apr 21, 2015, 5:02:24 PM
+    Document   : faculties_insert_update
+    Created on : Apr 22, 2015, 10:02:42 AM
     Author     : Fernando
 --%>
 
@@ -40,34 +40,34 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    String student_id = request.getParameter( "student_id" );
+                    String faculty_id = request.getParameter( "faculty_id" );
                     String name = request.getParameter( "name" );
                     String date_of_birth = request.getParameter( "date_of_birth" );
                     String address = request.getParameter( "address" );
                     String email = request.getParameter( "email" );
                     String level = request.getParameter( "level" );
-
+                    
                     try
                     {
-                        int nu = statement.executeUpdate( "UPDATE students SET name = '" 
-                            + name + "', date_of_birth = (to_date('" + date_of_birth 
-                            + "', 'YYYY-MM-DD')), address = '" + address 
-                            + "', email = '" + email + "', level = '" + level 
-                            + "' WHERE student_id = " + student_id + "" );
+                        int nu = statement.executeUpdate( "UPDATE faculties SET name = '" + name 
+                            + "', date_of_birth = (to_date('"
+                            + date_of_birth + "', 'YYYY-MM-DD')), address = '" 
+                            + address + "', email = '" + email + "', level = '" 
+                            + level + "' WHERE faculty_id = " + faculty_id + "" );
                         if(nu == 0)
                         {
                             out.println("<h3>Error</h3>");
-                        out.println("Error perfroming update of " + name + "<br><br>Cannot change Student ID");
-                        %><br><br><a href="students.jsp">Students</a><%
+                        out.println("Error perfroming update of " + name + "<br><br>Cannot change Faculty ID");
+                        %><br><br><a href="faculties.jsp">Faculties</a><%
                         }
                         else
-                            response.sendRedirect( "students.jsp" );
+                            response.sendRedirect( "faculties.jsp" );
                     }
                     catch(SQLException e)
                     {
                         out.println("<h3>Error</h3>");
                         out.println("Error perfroming update of " + name + "<br><br>" + e.getMessage() + "</h3>");
-                        %><br><br><a href="students.jsp">Students</a><%
+                        %><br><br><a href="faculties.jsp">Faculties</a><%
                     }
                 }
                 else

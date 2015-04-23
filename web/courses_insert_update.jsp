@@ -1,6 +1,6 @@
 <%-- 
-    Document   : students_insert_update
-    Created on : Apr 21, 2015, 5:02:24 PM
+    Document   : courses_insert_update
+    Created on : Apr 22, 2015, 10:56:26 AM
     Author     : Fernando
 --%>
 
@@ -14,6 +14,7 @@
         <%
             Connection connection = null;
             Statement statement = null;
+            ResultSet rs = null;
 
             String level_ = session.getAttribute( "level" ).toString();
 
@@ -40,34 +41,38 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    String student_id = request.getParameter( "student_id" );
-                    String name = request.getParameter( "name" );
-                    String date_of_birth = request.getParameter( "date_of_birth" );
-                    String address = request.getParameter( "address" );
-                    String email = request.getParameter( "email" );
+                    int course_id = Integer.parseInt( request.getParameter( "course_id" ) );
+                    String description = request.getParameter( "description" );
                     String level = request.getParameter( "level" );
-
+                    String semester = request.getParameter( "semester" );
+                    
+                    String faculty_name = request.getParameter( "faculty_name" );
+                    rs = statement.executeQuery( "SELECT faculty_id FROM faculties WHERE name = '" 
+                            + faculty_name + "'" );
+                    rs.next();
+                    int faculty_id = rs.getInt( "faculty_id" );
+                    
                     try
-                    {
-                        int nu = statement.executeUpdate( "UPDATE students SET name = '" 
-                            + name + "', date_of_birth = (to_date('" + date_of_birth 
-                            + "', 'YYYY-MM-DD')), address = '" + address 
-                            + "', email = '" + email + "', level = '" + level 
-                            + "' WHERE student_id = " + student_id + "" );
+                    {                        
+                        int nu = statement.executeUpdate( "UPDATE courses SET description = '" + description 
+                            + "', level = '" 
+                            + level + "', semester = '" + semester + "', instructor = " 
+                            + faculty_id + " WHERE course_id = " + course_id + "" );
+                        
                         if(nu == 0)
                         {
                             out.println("<h3>Error</h3>");
-                        out.println("Error perfroming update of " + name + "<br><br>Cannot change Student ID");
-                        %><br><br><a href="students.jsp">Students</a><%
+                        out.println("Error perfroming update of " + description + "<br><br>Cannot change Course ID");
+                        %><br><br><a href="courses.jsp">Courses</a><%
                         }
                         else
-                            response.sendRedirect( "students.jsp" );
+                            response.sendRedirect( "courses.jsp" );
                     }
                     catch(SQLException e)
                     {
                         out.println("<h3>Error</h3>");
-                        out.println("Error perfroming update of " + name + "<br><br>" + e.getMessage() + "</h3>");
-                        %><br><br><a href="students.jsp">Students</a><%
+                        out.println("Error perfroming update of " + description + "<br><br>" + e.getMessage() + "</h3>");
+                        %><br><br><a href="courses.jsp">Courses</a><%
                     }
                 }
                 else

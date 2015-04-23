@@ -44,7 +44,7 @@
             {
                 rs = statement.executeQuery( "SELECT * FROM faculties" );
                 out.println( "<table border=1>" );
-                out.println( "<tr><td> faculty_id </td><td> name </td><td> date_of_birth </td><td> address </td><td> email </td><td> level </td></tr>" );
+                out.println( "<tr><td> Faculty ID </td><td> Name </td><td> Date of Birth </td><td> Address </td><td> Email </td><td> Level </td></tr>" );
                 while ( rs.next() )
                 {
                     String faculty_id = rs.getString( "faculty_id" );
@@ -64,7 +64,8 @@
                 <td><input type="text" name="address" required></td>
                 <td><input type="email" name="email" required></td>
                 <td><select name="level">
-                        <option selected>Instr</option>
+                        <option selected disabled hidden value=''></option>
+                        <option>Instr</option>
                         <option>Prof</option>
                         <option>AP</option>
                     </select></td>
@@ -75,9 +76,25 @@
             rs = statement.executeQuery( "SELECT * FROM faculties" );
         %>
 
+        <h3>Update Faculty</h3>
+        <form action="faculties_update.jsp" method="post">
+            <select name="faculty_name">
+                <option selected disabled hidden value=''></option>
+                <%  while ( rs.next() )
+                    {%>
+                <option><%= rs.getString( "name" )%></option>
+                <% } %>
+            </select>
+            <br><br><input type="submit" value="Update">
+        </form> 
+        <%
+            rs = statement.executeQuery( "SELECT * FROM faculties" );
+        %>
+
         <h3>Delete Faculty</h3>
         <form action="faculties_delete.jsp" method="post">
             <select name="faculty_name">
+                <option selected disabled hidden value=''></option>
                 <%  while ( rs.next() )
                     {%>
                 <option><%= rs.getString( "name" )%></option>

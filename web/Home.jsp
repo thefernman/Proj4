@@ -50,8 +50,9 @@
                     rs = statement.executeQuery( "SELECT table_name FROM information_schema.tables "
                             + "WHERE table_schema = 'public' and table_name != 'school_probs' and "
                             + "table_name != 'grade_values' and table_name != 'simulated_records' and "
-                            + "table_name != 'login'" );
+                            + "table_name != 'login' and table_name != 'title'" );
                     out.println( "<table border=1>" );
+                    out.println("<tr><td>Table Views</td></tr>");
                     while ( rs.next() )
                     {
                         String table_name = rs.getString( "table_name" );

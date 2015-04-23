@@ -49,8 +49,18 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    statement.executeUpdate( "DELETE FROM faculties WHERE name = '" + name + "'" );
-                    response.sendRedirect( "faculties.jsp" );
+                    try
+                    {
+                        statement.executeUpdate( "DELETE FROM faculties WHERE name = '" + name + "'" );
+                        response.sendRedirect( "faculties.jsp" );
+                    }
+                    catch(SQLException e)
+                    {
+                        out.println("<h3>Error</h3>");
+                        out.println("Error perfroming deletion of " + name + "<br><br>" + e.getMessage() + "</h3>");
+                        %><br><br><a href="faculties.jsp">Faculties</a><%
+                    }
+                    
                 }
                 else
                 {

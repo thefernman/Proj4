@@ -49,9 +49,18 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    statement.executeUpdate( "DELETE FROM students WHERE student_id = "
-                    + "(SELECT student_id FROM students WHERE name = '" + name + "')" );
-                    response.sendRedirect( "students.jsp" );
+                    try
+                    {
+                        statement.executeUpdate( "DELETE FROM students WHERE name = '" + name + "'" );
+                            response.sendRedirect( "students.jsp" );
+                    }
+                    catch(SQLException e)
+                    {
+                        out.println("<h3>Error</h3>");
+                        out.println("Error perfroming deletion of " + name + "<br><br>" + e.getMessage() + "</h3>");
+                        out.println("_" + name + "_");
+                        %><br><br><a href="students.jsp">Students</a><%
+                    }
                 }
                 else
                 {
@@ -63,8 +72,6 @@
                 out.println( "Error" );
                 response.sendRedirect( "Error.jsp" );
             }
-
-
         %>
     </body>
 </html>

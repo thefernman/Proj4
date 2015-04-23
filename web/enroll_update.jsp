@@ -1,6 +1,6 @@
 <%-- 
-    Document   : enroll_delete
-    Created on : Apr 19, 2015, 7:23:42 PM
+    Document   : enroll_update
+    Created on : Apr 23, 2015, 5:00:02 AM
     Author     : Fernando
 --%>
 
@@ -9,6 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Enroll Update</title>
     </head>
     <body>
         <%
@@ -28,7 +29,6 @@
             {
                 out.println( "<h1>exception: " + e + e.getMessage() + "</h1>" );
             }
-
             try
             {
                 Class.forName( "org.postgresql.Driver" );
@@ -50,49 +50,67 @@
             }
 
             if ( connection != null )
-            {
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    String description = enrollment.substring( enrollment.indexOf( ":")+2 );
-                    String name = enrollment.substring( 0, enrollment.indexOf( ":")-1 );
+                    String className = enrollment.substring( enrollment.indexOf( ":")+2 );
+                    String name_ = enrollment.substring( 0, enrollment.indexOf( ":")-1 );
                     
                     rs = statement.executeQuery( "SELECT enroll.student_id, "
                             + "enroll.course_id, enroll.grade, students.name, "
                             + "courses.description FROM enroll, students, courses "
                             + "WHERE enroll.student_id = students.student_id and "
                             + "enroll.course_id = courses.course_id and students.name = '" 
-                            + name + "' and courses.description = '" + description + "'" );
+                            + name_ + "' and courses.description = '" + className + "'" );
                     
                     rs.next();
-                    int student_id = rs.getInt( "student_id" );
-                    int course_id = rs.getInt( "course_id");
+                    String course_id = rs.getString( "course_id" );
+                    String student_id = rs.getString( "student_id" );
+                    String grade = rs.getString( "grade" );
+                    String name = rs.getString( "name" );
+                    String description = rs.getString( "description" );
                     
-                    try
-                    {                        
-                        statement.executeUpdate( "DELETE FROM enroll WHERE student_id = " 
-                                + student_id + " and course_id = " + course_id + "" );
-                        response.sendRedirect( "enroll.jsp" );
-                    }
-                    catch(SQLException e)
-                    {
-                        out.println("<h3>Error</h3>");
-                        out.println("Error perfroming delete of enrollment of " 
-                                + name + " for "+ description 
-                                + "<br><br>" + e.getMessage() + "</h3>");
-                        %><br><br><a href="enroll.jsp">Enroll</a><%
-                    }
+//                    rs = statement.executeQuery( "SELECT enroll.student_id, "
+//                            + "enroll.course_id, enroll.grade, students.name, "
+//                            + "courses.description FROM enroll, students, courses "
+//                            + "WHERE enroll.student_id = students.student_id and "
+//                            + "enroll.course_id = courses.course_id" );
+                    
+                    %>
+                    <h3>Update Enroll</h>
+                    <table border=1>
+                        <tr><td> Student Name </td><td> Description </td><td> Grade </td></tr>
+                    <form action="enroll_insert_update.jsp" method="post">
+                        <tr><td><input type="text" name="name" readonly c:out value="<%=name%>" </td>
+                            <td><input type="text" name="description" readonly c:out value="<%=description%>" required></td>
+                <td><select name="grade">
+                    <option selected><%=grade%></option>
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                    <option>F</option>
+                    </select></td>
+                    </table>
+            <br><input type="submit" value="Update">
+        </form>
+        </table>
+                    <%
                 }
                 else
                 {
                     out.println( "No Access" );
                     response.sendRedirect( "No_Access.jsp" );
                 }
-            }
             else
             {
                 out.println( "Error" );
                 response.sendRedirect( "Error.jsp" );
             }
+
+
         %>
+        
+        <br><br><a href="enroll.jsp">Enroll</a>
+    </body>
     </body>
 </html>

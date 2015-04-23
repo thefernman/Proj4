@@ -19,7 +19,7 @@
             Connection connection = null;
             Statement statement = null;
             ResultSet rs = null;
-
+            
             try
             {
                 Class.forName( "org.postgresql.Driver" );
@@ -42,11 +42,12 @@
             statement = connection.createStatement();
 
             if ( connection != null )
+            {
                 if ( !( level_.equals( "student" ) ) )
                 {
                     rs = statement.executeQuery( "SELECT * FROM students ORDER BY student_id" );
                     out.println( "<table border=1>" );
-                    out.println( "<tr><td> student_id </td><td> name </td><td> date_of_birth </td><td> address </td><td> email </td><td> level </td></tr>" );
+                    out.println( "<tr><td> Student ID </td><td> Name </td><td> Date of Birth </td><td> Address </td><td> Email </td><td> Level </td></tr>" );
                     while ( rs.next() )
                     {
                         int student_id = rs.getInt( "student_id" );
@@ -68,7 +69,8 @@
                 <td><input type="text" name="address" required></td>
                 <td><input type="email" name="email" required></td>
                 <td><select name="level">
-                        <option selected>ugrad</option>
+                        <option selected disabled hidden value=''></option>
+                        <option>ugrad</option>
                         <option>grad</option>
                     </select></td>
                     <%                out.println( "</table>" );
@@ -82,6 +84,7 @@
         <h4>Update Student</h4>
         <form action="students_update.jsp" method="post">
             <select name="student_name">
+                <option selected disabled hidden value=''></option>
                 <%  while ( rs.next() )
                     {%>
                 <option><%= rs.getString( "name" )%></option>
@@ -96,6 +99,7 @@
         <h4>Delete Student</h4>
         <form action="students_delete.jsp" method="post">
             <select name="student_name">
+                <option selected disabled hidden value=''></option>
                 <%  while ( rs.next() )
                     {%>
                 <option><%= rs.getString( "name" )%></option>
@@ -107,7 +111,7 @@
 
                 }
 
-                else //for students access, results are that one student
+                else if(level_.equals( "student" ))//for students access, results are that one student
                 {
                     rs = statement.executeQuery( "SELECT * FROM students WHERE name = '" + name_ + "'" );
                     out.println( "<table border=1>" );
@@ -124,6 +128,9 @@
                     }
                     out.println( "</table>" );
                 }
+                else
+                    response.sendRedirect( "Error.jsp" );
+            }
             connection.close();
         %>
 

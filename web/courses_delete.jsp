@@ -15,12 +15,12 @@
             Connection connection = null;
             Statement statement = null;
             String level_ = null;
-            String description = null;
+            String description = request.getParameter( "description" );;
 
             try
             {
                 level_ = session.getAttribute( "level" ).toString();
-                description = request.getParameter( "description" );
+                //description = request.getParameter( "description" );
             }
             catch ( NullPointerException e )
             {
@@ -50,8 +50,18 @@
             if ( connection != null )
                 if ( !( level_.equals( "student" ) ) )
                 {
-                    statement.executeUpdate( "DELETE FROM courses WHERE description = '" + description + "'" );
-                    response.sendRedirect( "courses.jsp" );
+                    try
+                    {
+                        statement.executeUpdate( "DELETE FROM courses WHERE description = '" + description + "'" );
+                        response.sendRedirect( "courses.jsp" );
+                    }
+                    catch(SQLException e)
+                    {
+                        out.println("<h3>Error</h3>");
+                        out.println("Error perfroming deletion of " + description + "<br><br>" + e.getMessage() + "</h3>");
+                        %><br><br><a href="faculties.jsp">Courses</a><%
+                    }
+                    
                 }
                 else
                 {

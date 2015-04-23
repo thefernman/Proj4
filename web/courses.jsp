@@ -46,8 +46,8 @@
                         + "faculties.name, semester FROM courses, faculties "
                         + "WHERE instructor = faculty_id ORDER BY course_id" );
                 out.println( "<table border=1>" );
-                out.println( "<tr><td> course_id </td><td> description </td><td> level "
-                        + "</td><td> instructor </td><td> semester </td></tr>" );
+                out.println( "<tr><td> Course ID </td><td> Description </td><td> Level "
+                        + "</td><td> Instructor </td><td> Semester </td></tr>" );
                 while ( rs.next() )
                 {
                     String course_id = rs.getString( "course_id" );
@@ -65,10 +65,12 @@
             <tr><td><input type="number" name="course_id" required></td>
                 <td><input type="text" name="description" required></td>
                 <td><select name="level" id>
-                        <option selected>ugrad</option>
+                        <option selected disabled hidden value=''></option>
+                        <option>ugrad</option>
                         <option>grad</option>
                     </select></td>
                 <td><select name="faculty_name">
+                        <option selected disabled hidden value=''></option>
                         <%
                             rs = statement.executeQuery( "SELECT name FROM faculties" );
                             //rs.first();
@@ -87,13 +89,28 @@
             <br><input type="submit" value="Insert">
         </form>
         <%
-            rs = statement.executeQuery( "SELECT description, course_id FROM courses" );
-            //rs.first();
+            rs = statement.executeQuery( "SELECT description, course_id FROM courses ORDER BY course_id" );
+        %>
+
+        <h3>Update Course</h3>
+        <form action="courses_update.jsp" method="post">
+            <select name="description">
+                <option selected disabled hidden value=''></option>
+                <%  while ( rs.next() )
+                    {%>
+                <option><%= rs.getString( "description" )%></option>
+                <% } %>
+            </select>
+            <br><br><input type="submit" value="Update">
+        </form>
+        <%
+            rs = statement.executeQuery( "SELECT description, course_id FROM courses ORDER BY course_id" );
         %>
 
         <h3>Delete Course</h3>
         <form action="courses_delete.jsp" method="post">
             <select name="description">
+                <option selected disabled hidden value=''></option>
                 <%  while ( rs.next() )
                     {%>
                 <option><%= rs.getString( "description" )%></option>

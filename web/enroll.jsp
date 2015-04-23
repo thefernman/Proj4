@@ -58,7 +58,7 @@
                             + "WHERE enroll.student_id = students.student_id and "
                             + "enroll.course_id = courses.course_id" );
                     out.println( "<table border=1>" );
-                    out.println( "<tr><td> Student Name </td><td> Course Desription </td><td> grade </td></tr>" );
+                    out.println( "<tr><td> Student Name </td><td> Course Desription </td><td> Grade </td></tr>" );
                     while ( rs.next() )
                     {
                         String student_name = rs.getString( "name" );
@@ -100,6 +100,43 @@
                         out.println( "</table>" );
                     %>
             <br><input type="submit" value="Insert">
+        </form>
+            
+            <%
+            rs = statement.executeQuery( "SELECT enroll.student_id, "
+                            + "enroll.course_id, enroll.grade, students.name, "
+                            + "courses.description FROM enroll, students, courses "
+                            + "WHERE enroll.student_id = students.student_id and "
+                            + "enroll.course_id = courses.course_id" );
+        %>
+        <h3>Update Enroll</h3>
+        <form action="enroll_update.jsp" method="post">
+            <select name="enrollment">
+                <option selected disabled hidden value=''></option>
+                <%  while ( rs.next() )
+                    {%>
+                <option><%= rs.getString( "name" )%> : <%= rs.getString( "description" )%></option>
+                <% } %>
+            </select>
+            <br><br><input type="submit" value="Update">
+        </form>
+        <%
+            rs = statement.executeQuery( "SELECT enroll.student_id, "
+                            + "enroll.course_id, enroll.grade, students.name, "
+                            + "courses.description FROM enroll, students, courses "
+                            + "WHERE enroll.student_id = students.student_id and "
+                            + "enroll.course_id = courses.course_id" );
+        %>
+        <h3>Delete Enroll</h3>
+        <form action="enroll_delete.jsp" method="post">
+            <select name="enrollment">
+                <option selected disabled hidden value=''></option>
+                <%  while ( rs.next() )
+                    {%>
+                <option><%= rs.getString( "name" )%> : <%= rs.getString( "description" )%></option>
+                <% } %>
+            </select>
+            <br><br><input type="submit" value="Delete">
         </form>
         <%
                 }
